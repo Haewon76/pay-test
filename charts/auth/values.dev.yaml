@@ -1,94 +1,95 @@
-replicaCount: 1
+auth:
+  replicaCount: 1
 
-containers:
-  ports:
-    containerPort: 30002
+  containers:
+    ports:
+      containerPort: 30002
 
-image:
-  repository: docker-registry-server:5000/auth
-  tag: develop-init
-  pullPolicy: IfNotPresent
-configmap:
-  enabled: true
-  values:
-    SPRING_PROFILES_ACTIVE: dev
-    config_host: ml-config-rollout-active-svc.ml-dev # configmap
-ingress:
-  enabled: ture
-  className: nginx
-  annotations:
-    nginx.ingress.kubernetes.io/affinity: cookie
-    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
-    nginx.ingress.kubernetes.io/session-cookie-name: CMSESSION
-  hosts:
-    - host: dev-auth.mallowlink.com
-      paths:
-        - pathType: Prefix
-          path: /
-          backend:
-            service:
-              name: auth-rollout-active-svc
-              port:
-                name: http
+  image:
+    repository: docker-registry-server:5000/auth
+    tag: develop-init
+    pullPolicy: IfNotPresent
+  configmap:
+    enabled: true
+    values:
+      SPRING_PROFILES_ACTIVE: dev
+      config_host: ml-config-rollout-active-svc.ml-dev # configmap
+  ingress:
+    enabled: ture
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/affinity: cookie
+      nginx.ingress.kubernetes.io/session-cookie-hash: sha1
+      nginx.ingress.kubernetes.io/session-cookie-name: CMSESSION
+    hosts:
+      - host: dev-auth.mallowlink.com
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: auth-rollout-active-svc
+                port:
+                  name: http
 
-imagePullSecrets:
-  - name: ghcr-key-scr
-nameOverride: ""
-fullnameOverride: ""
+  imagePullSecrets:
+    - name: ghcr-key-scr
+  nameOverride: ""
+  fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
 
-podSecurityContext: {}
-  # fsGroup: 2000
+  podSecurityContext: {}
+    # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
 
-service:
-  type: ClusterIP
-  port: 8080
-  clusterIP: None
+  service:
+    type: ClusterIP
+    port: 8080
+    clusterIP: None
 
-resources: {}
+  resources: {}
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
+  nodeSelector: {}
 
-tolerations: []
+  tolerations: []
 
-affinity: {}
+  affinity: {}
 
-envFrom:
-  - configMapRef:
-      name: pay-test-auth-cm
-  - secretRef:
-      name: config-key-scr
+  envFrom:
+    - configMapRef:
+        name: pay-test-auth-cm
+    - secretRef:
+        name: config-key-scr
 
-rollout:
-  strategy:
-    blueGreen:
-      autoPromotionEnabled: true
-secrets:
-  enabled: false
-otel:
-  exporterEndpoint: "http://monitoring-opentelemetry-collector.logging:4317"
+  rollout:
+    strategy:
+      blueGreen:
+        autoPromotionEnabled: true
+  secrets:
+    enabled: false
+  otel:
+    exporterEndpoint: "http://monitoring-opentelemetry-collector.logging:4317"
 
 
