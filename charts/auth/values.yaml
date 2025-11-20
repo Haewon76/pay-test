@@ -18,7 +18,8 @@ auth:
     enabled: false
 
   imagePullSecrets:
-    - name: ghcr-key-scr
+    # - name: ghcr-key-scr
+    - name: ""
   nameOverride: ""
   fullnameOverride: ""
 
