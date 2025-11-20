@@ -1,0 +1,33 @@
+{{- define "common-template.service" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common-template.name" . }}-rollout-active-svc
+  labels:
+    {{- include "common-template.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "common-template.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common-template.name" . }}-rollout-previews-svc
+  labels:
+    {{- include "common-template.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "common-template.selectorLabels" . | nindent 4 }}
+{{- end }}

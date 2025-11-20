@@ -1,0 +1,95 @@
+{{- define "common-template.rollout" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "common-template.fullname" . }}
+  labels:
+    {{- include "common-template.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      {{- include "common-template.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "common-template.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "common-template.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Values.customContainerName | default .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            {{- toYaml .Values.envFrom | nindent 12 }}
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            # - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            #   value: {{ .Values.otel.exporterEndpoint }}
+            # - name: OTEL_TRACES_EXPORTER
+            #   value: otlp
+            # - name: OTEL_LOGS_EXPORTER
+            #   value: otlp
+            # - name: OTEL_METRICS_EXPORTER
+            #   value: none
+            # - name: OTEL_SERVICE_NAME
+            #   value: {{ include "common-template.name" . }}
+            # - name: MANAGEMENT_METRICS_TAGS_APPLICATION
+            #   value: {{ include "common-template.name" . }}
+            # - name: OTEL_RESOURCE_ATTRIBUTES
+            #   value: compose_service={{ include "common-template.name" . }}
+            # - name: OTEL_INSTRUMENTATION_HEALTH_ENABLED
+            #   value: "false"
+          ports:
+            - name: http
+              containerPort: {{ .Values.containers.ports.containerPort }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          startupProbe:
+            {{- toYaml .Values.startupProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  strategy:
+    blueGreen:
+      activeService: {{ include "common-template.name" . }}-rollout-active-svc
+      previewService: {{ include "common-template.name" . }}-rollout-previews-svc
+      autoPromotionEnabled: {{ .Values.rollout.strategy.blueGreen.autoPromotionEnabled}} # Blue/Green 자동 스위칭 옵션
+      previewReplicaCount: 1 # Blue/Green Preview Replica 수
+{{- end }}

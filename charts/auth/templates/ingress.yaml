@@ -1,0 +1,1 @@
+{{- include "common-template.ingress" . | nindent 0 }}
