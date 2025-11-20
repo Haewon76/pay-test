@@ -42,8 +42,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            # - name: OTEL_EXPORTER_OTLP_ENDPOINT
-            #   value: {{ .Values.otel.exporterEndpoint }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ .Values.otel.exporterEndpoint }}
             # - name: OTEL_TRACES_EXPORTER
             #   value: otlp
             # - name: OTEL_LOGS_EXPORTER
