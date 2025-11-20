@@ -98,3 +98,6 @@ rollout:
 # docker login - pull auth
 secrets:
   enabled: false
+
+otel:
+  exporterEndpoint: ""
