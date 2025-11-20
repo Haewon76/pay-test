@@ -1,7 +1,7 @@
-auth:
+gateway:
   replicaCount: 1
   image:
-    repository: docker-registry-server:5000/mallowlink-pay-auth
+    repository: docker-registry-server:5000/mallowlink-pay-gateway
     tag: develop-init
     pullPolicy: IfNotPresent
   configmap:
@@ -17,18 +17,18 @@ auth:
       nginx.ingress.kubernetes.io/session-cookie-hash: sha1
       nginx.ingress.kubernetes.io/session-cookie-name: CMSESSION
     hosts:
-      - host: dev-auth.mallowlink.com
+      - host: dev-gateway.mallowlink.com
         paths:
           - pathType: Prefix
             path: /
             backend:
               service:
-                name: auth-rollout-active-svc
+                name: gateway-rollout-active-svc
                 port:
                   name: http
   envFrom:
     - configMapRef:
-        name: pay-test-auth-cm
+        name: pay-test-gateway-cm
     - secretRef:
         name: config-key-scr
 
