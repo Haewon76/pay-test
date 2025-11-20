@@ -13,6 +13,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v5.1.1-null-dev-5d64afb4"
 
+ingress:
+  enabled: false
+
 imagePullSecrets:
   - name: ghcr-key-scr
 nameOverride: ""
