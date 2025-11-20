@@ -1,5 +1,9 @@
 replicaCount: 1
 
+containers:
+  ports:
+    containerPort: 30002
+
 image:
   repository: docker-registry-server:5000/auth
   tag: develop-init
@@ -26,11 +30,62 @@ ingress:
               name: auth-rollout-active-svc
               port:
                 name: http
+
+imagePullSecrets:
+  - name: ghcr-key-scr
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+  clusterIP: None
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
 envFrom:
   - configMapRef:
       name: pay-test-auth-cm
   - secretRef:
       name: config-key-scr
+
+rollout:
+  strategy:
+    blueGreen:
+      autoPromotionEnabled: true
 secrets:
   enabled: false
 otel:
