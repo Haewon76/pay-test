@@ -1,107 +1,107 @@
 # Default values for api.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+auth:
+  containers:
+    ports:
+      containerPort: 30002
 
-containers:
-  ports:
-    containerPort: 30002
+  image:
+    # 운영 배포시 설정 예정
+    repository: ghcr.io/cashmallowcorp/mallowlink-api
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v5.1.1-null-dev-5d64afb4"
+  configmap:
+    enabled: false
+  ingress:
+    enabled: false
 
-image:
-  # 운영 배포시 설정 예정
-  repository: ghcr.io/cashmallowcorp/mallowlink-api
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "v5.1.1-null-dev-5d64afb4"
-configmap:
-  enabled: false
-ingress:
-  enabled: false
+  imagePullSecrets:
+    - name: ghcr-key-scr
+  nameOverride: ""
+  fullnameOverride: ""
 
-imagePullSecrets:
-  - name: ghcr-key-scr
-nameOverride: ""
-fullnameOverride: ""
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  # podAnnotations:
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/path: /transaction/actuator/prometheus
+  #   prometheus.io/port: "20000"
+  #   prometheus.io/scheme: http
 
-# podAnnotations:
-#   prometheus.io/scrape: "true"
-#   prometheus.io/path: /transaction/actuator/prometheus
-#   prometheus.io/port: "20000"
-#   prometheus.io/scheme: http
+  podSecurityContext: {}
+    # fsGroup: 2000
 
-podSecurityContext: {}
-  # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  service:
+    type: ClusterIP
+    port: 8080
+    clusterIP: None
 
-service:
-  type: ClusterIP
-  port: 8080
-  clusterIP: None
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  nodeSelector: {}
 
-nodeSelector: {}
+  tolerations: []
 
-tolerations: []
+  affinity: {}
 
-affinity: {}
+  # health 체크 확인 후 추가 예정
+  # livenessProbe:
+  #   httpGet:
+  #     path: /transaction/actuator/health
+  #     port: http
+  # readinessProbe:
+  #   httpGet:
+  #     path: /transaction/actuator/health
+  #     port: http
+  # startupProbe:
+  #   httpGet:
+  #     port: http
+  #     path: /transaction/actuator/health
+  #   initialDelaySeconds: 60
+  #   periodSeconds: 5
 
-# health 체크 확인 후 추가 예정
-# livenessProbe:
-#   httpGet:
-#     path: /transaction/actuator/health
-#     port: http
-# readinessProbe:
-#   httpGet:
-#     path: /transaction/actuator/health
-#     port: http
-# startupProbe:
-#   httpGet:
-#     port: http
-#     path: /transaction/actuator/health
-#   initialDelaySeconds: 60
-#   periodSeconds: 5
+  rollout:
+    strategy:
+      blueGreen:
+        autoPromotionEnabled: true
 
-rollout:
-  strategy:
-    blueGreen:
-      autoPromotionEnabled: true
+  # docker login - pull auth
+  secrets:
+    enabled: false
 
-# docker login - pull auth
-secrets:
-  enabled: false
-
-otel:
-  exporterEndpoint: ""
+  otel:
+    exporterEndpoint: ""
