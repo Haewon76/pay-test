@@ -2,7 +2,7 @@ gateway:
   replicaCount: 1
   image:
     repository: haeseung/mallowlink-pay-gateway
-    tag: develop-9f70f43ed0
+    tag: develop-78366f9ba6
     pullPolicy: IfNotPresent
   configmap:
     enabled: true
