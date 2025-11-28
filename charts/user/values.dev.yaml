@@ -16,7 +16,7 @@ user:
     - configMapRef:
         name: pay-test-user-cm
     - secretRef:
-        name: config-key-scr
+        # name: config-key-scr
 
   rollout:
     strategy:

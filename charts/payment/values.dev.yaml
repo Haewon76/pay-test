@@ -16,7 +16,7 @@ payment:
     - configMapRef:
         name: pay-test-payment-cm
     - secretRef:
-        name: config-key-scr
+        # name: config-key-scr
 
   rollout:
     strategy:

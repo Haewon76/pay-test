@@ -16,7 +16,7 @@ auth:
     - configMapRef:
         name: pay-test-auth-cm
     - secretRef:
-        name: config-key-scr
+        # name: config-key-scr
 
   rollout:
     strategy:

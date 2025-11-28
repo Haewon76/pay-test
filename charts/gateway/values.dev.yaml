@@ -16,7 +16,7 @@ gateway:
     - configMapRef:
         name: pay-test-gateway-cm
     - secretRef:
-        name: config-key-scr
+        # name: config-key-scr
 
   rollout:
     strategy:
