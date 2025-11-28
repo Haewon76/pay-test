@@ -10,7 +10,7 @@ user:
       SPRING_PROFILES_ACTIVE: dev
       config_host: ml-config-rollout-active-svc.ml-dev # configmap
   ingress:
-    enabled: flase
+    enabled: false
     className: nginx
   envFrom:
     - configMapRef:
