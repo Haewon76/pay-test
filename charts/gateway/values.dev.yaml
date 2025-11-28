@@ -1,8 +1,8 @@
 gateway:
   replicaCount: 1
   image:
-    repository: docker-registry-server:5000/mallowlink-pay-gateway
-    tag: develop-init
+    repository: haeseung/mallowlink-pay-gateway
+    tag: develop-9f70f43ed0
     pullPolicy: IfNotPresent
   configmap:
     enabled: true
@@ -12,20 +12,6 @@ gateway:
   ingress:
     enabled: false
     className: nginx
-    annotations:
-      nginx.ingress.kubernetes.io/affinity: cookie
-      nginx.ingress.kubernetes.io/session-cookie-hash: sha1
-      nginx.ingress.kubernetes.io/session-cookie-name: CMSESSION
-    hosts:
-      - host: dev-gateway.mallowlink.com
-        paths:
-          - pathType: Prefix
-            path: /
-            backend:
-              service:
-                name: gateway-rollout-active-svc
-                port:
-                  name: http
   envFrom:
     - configMapRef:
         name: pay-test-gateway-cm
