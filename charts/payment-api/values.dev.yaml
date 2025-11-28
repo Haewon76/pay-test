@@ -14,7 +14,7 @@ payment-api:
     className: nginx
   envFrom:
     - configMapRef:
-        name: pay-test-payment-cm
+        name: pay-test-payment-api-cm
     - secretRef:
         name: config-key-scr
 

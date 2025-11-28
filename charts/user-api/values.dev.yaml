@@ -14,7 +14,7 @@ user-api:
     className: nginx
   envFrom:
     - configMapRef:
-        name: pay-test-user-cm
+        name: pay-test-user-api-cm
     - secretRef:
         name: config-key-scr
 
