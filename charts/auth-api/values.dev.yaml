@@ -1,4 +1,4 @@
-auth:
+auth-api:
   replicaCount: 1
   image:
     repository: haeseung/mallowlink-pay-auth-api

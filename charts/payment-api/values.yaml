@@ -1,10 +1,10 @@
 # Default values for api.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-auth:
+payment-api:
   containers:
     ports:
-      containerPort: 30002
+      containerPort: 30004
 
   image:
     # 운영 배포시 설정 예정

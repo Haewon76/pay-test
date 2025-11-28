@@ -1,4 +1,4 @@
-payment:
+payment-api:
   replicaCount: 1
   image:
     repository: haeseung/mallowlink-pay-payment-api

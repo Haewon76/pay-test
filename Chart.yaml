@@ -28,14 +28,14 @@ dependencies:
     version: 0.1.0
     repository: "file://./gateway"
 
-  - name: auth
+  - name: auth-api
     version: 0.1.0
-    repository: "file://./auth"
+    repository: "file://./auth-api"
 
-  - name: user
+  - name: user-api
     version: 0.1.0
-    repository: "file://./user"
+    repository: "file://./user-api"
 
-  - name: payment
+  - name: payment-api
     version: 0.1.0
-    repository: "file://./payment"
+    repository: "file://./payment-api"
