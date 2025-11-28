@@ -1,7 +1,7 @@
 auth:
   replicaCount: 1
   image:
-    repository: docker-registry-server:5000/mallowlink-pay-auth
+    repository: docker-registry-server:5000/mallowlink-pay-user
     tag: develop-init
     pullPolicy: IfNotPresent
   configmap:
@@ -10,25 +10,25 @@ auth:
       SPRING_PROFILES_ACTIVE: dev
       config_host: ml-config-rollout-active-svc.ml-dev # configmap
   ingress:
-    enabled: false
+    enabled: flase
     className: nginx
     annotations:
       nginx.ingress.kubernetes.io/affinity: cookie
       nginx.ingress.kubernetes.io/session-cookie-hash: sha1
       nginx.ingress.kubernetes.io/session-cookie-name: CMSESSION
     hosts:
-      - host: dev-auth.mallowlink.com
+      - host: dev-user.mallowlink.com
         paths:
           - pathType: Prefix
             path: /
             backend:
               service:
-                name: auth-rollout-active-svc
+                name: user-rollout-active-svc
                 port:
                   name: http
   envFrom:
     - configMapRef:
-        name: pay-test-auth-cm
+        name: pay-test-user-cm
     - secretRef:
         name: config-key-scr
 

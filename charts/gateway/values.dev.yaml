@@ -10,7 +10,7 @@ gateway:
       SPRING_PROFILES_ACTIVE: dev
       config_host: ml-config-rollout-active-svc.ml-dev # configmap
   ingress:
-    enabled: ture
+    enabled: false
     className: nginx
     annotations:
       nginx.ingress.kubernetes.io/affinity: cookie
