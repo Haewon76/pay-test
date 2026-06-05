@@ -1,8 +1,8 @@
 user-api:
   replicaCount: 1
   image:
-    repository: haeseung/mallowlink-pay-user-api
-    tag: develop-78366f9ba6
+    repository: haeseung/user-api
+    tag: v0.0.1
     pullPolicy: IfNotPresent
   configmap:
     enabled: true
